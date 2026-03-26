@@ -1,73 +1,81 @@
 # claude-solve-and-explain
 
-A set of Claude Code slash commands for solving exercise sheets and generating LaTeX PDFs. Includes three skills that work together or independently.
+Eine Sammlung von Claude Code Slash-Commands zum Lösen von Übungsblättern und Erstellen von LaTeX-PDFs. Enthält 5 Skills, die zusammen oder einzeln verwendet werden können.
 
 ## Skills
 
-### `/solve-and-explain` (main skill)
-The orchestrator. Given an exercise sheet, it analyzes all tasks, works out solutions, then launches two agents in parallel to generate both PDFs at once.
+### `/solve-and-explain` (Haupt-Skill)
+Der Orchestrator. Bekommt ein Übungsblatt, analysiert alle Aufgaben, rechnet die Lösungen durch und startet dann zwei Agents parallel – einen für die Lösung, einen für die Erklärung.
 
 ### `/latex-solution-writer`
-Writes clean, student-style LaTeX solutions. Concise proofs, calculations, summary boxes, TikZ graphs. Written in first person ("I need to show...") rather than textbook-speak.
+Schreibt saubere LaTeX-Musterlösungen im Studenten-Stil. Beweise, Rechnungen, Zusammenfassungs-Boxen, TikZ-Graphen. In der ersten Person geschrieben ("Ich muss zeigen...") statt Lehrbuch-Sprache.
 
 ### `/explain-simply`
-Writes beginner-friendly LaTeX explanations with `merkbox` (blue) and `analogie` (green) tcolorbox environments. Every concept explained from scratch, every step justified with "why", real-world analogies throughout.
+Schreibt anfängerfreundliche LaTeX-Erklärungen mit `merkbox` (blau) und `analogie` (grün) tcolorbox-Umgebungen. Jedes Konzept von Grund auf erklärt, jeder Schritt mit "warum" begründet, Alltagsanalogien durchgehend.
 
 ### `/feynman`
-The Feynman learning technique: explain a concept simply, identify gaps in understanding, fill them, then refine. Use when learning something new or testing your understanding of a topic.
+Die Feynman-Lerntechnik: Ein Konzept einfach erklären, Lücken im Verständnis finden, diese füllen und die Erklärung verfeinern. Verwenden wenn man etwas Neues lernt oder sein Verständnis testen will.
 
 ### `/feynman-check`
-Quality check that applies the Feynman technique to an existing explanation document. Finds gaps: undefined terms, skipped steps, missing "why"s, walls of math without words. Then fills those gaps. Use after generating an explanation to verify it's actually understandable.
+Qualitätsprüfung mit der Feynman-Technik für bestehende Erklärungen. Findet Lücken: undefinierte Begriffe, übersprungene Schritte, fehlende "Warum"s, Mathe-Wände ohne Worterklärungen. Füllt diese Lücken dann. Nach dem Erstellen einer Erklärung verwenden, um zu prüfen ob sie wirklich verständlich ist.
 
-## Output
+## Ausgabe
 
-| Solution (latex-solution-writer) | Explanation (explain-simply) |
-|----------------------------------|------------------------------|
-| Concise, well-structured | Every concept explained from scratch |
-| Written like a student | Written like a tutor for beginners |
-| `\fbox{}` summary boxes | Blue `merkbox` for key formulas |
-| TikZ graphs where needed | Green `analogie` boxes for real-world comparisons |
-| 3-9 pages typical | 13-25 pages typical |
+| Lösung (latex-solution-writer) | Erklärung (explain-simply) |
+|--------------------------------|----------------------------|
+| Kompakt, gut strukturiert | Jedes Konzept von Grund auf erklärt |
+| Geschrieben wie ein Student | Geschrieben wie ein Nachhilfelehrer |
+| `\fbox{}` Zusammenfassungs-Boxen | Blaue `merkbox` für Formeln/Regeln |
+| TikZ-Graphen wo nötig | Grüne `analogie`-Boxen für Alltagsvergleiche |
+| Typisch 3-9 Seiten | Typisch 13-25 Seiten |
 
 ## Installation
 
 ```bash
-# All three skills (global)
+# Alle Skills global installieren
 cp solve-and-explain.md ~/.claude/commands/
 cp latex-solution-writer.md ~/.claude/commands/
 cp explain-simply.md ~/.claude/commands/
+cp feynman.md ~/.claude/commands/
+cp feynman-check.md ~/.claude/commands/
 
-# Or project-only
+# Oder nur für ein Projekt
 mkdir -p .claude/commands
 cp *.md .claude/commands/
 ```
 
-## Usage
+## Verwendung
 
 ```bash
-# Full pipeline: solution + explanation in parallel
-/solve-and-explain solve exercises 1-5 from the PDF
+# Komplette Pipeline: Lösung + Erklärung parallel
+/solve-and-explain löse Aufgaben 1-5 vom angehängten PDF
 
-# Just a clean solution
-/latex-solution-writer write solutions for exercises 10a, 10d, 10e
+# Nur eine saubere Lösung
+/latex-solution-writer schreibe Lösungen für Aufgaben 10a, 10d, 10e
 
-# Just a beginner-friendly explanation
-/explain-simply explain subspace test with examples for exercise 10
+# Nur eine anfängerfreundliche Erklärung
+/explain-simply erkläre den Unterraum-Test mit Beispielen für Aufgabe 10
+
+# Konzept mit Feynman-Technik verstehen
+/feynman erkläre mir was ein Untervektorraum ist
+
+# Bestehende Erklärung auf Verständlichkeit prüfen
+/feynman-check prüfe erklaerung_blatt03.tex - versteht ein Anfänger das?
 ```
 
-Works with any subject (math, logic, linear algebra, physics, etc.) and adapts to the exercise sheet's language.
+Funktioniert mit jedem Fach (Mathe, Logik, Lineare Algebra, Physik, etc.) und passt sich der Sprache des Übungsblatts an.
 
 ## Features
 
-- **Parallel agents** for fast generation (solve-and-explain)
-- **TikZ/pgfplots** graphs and sketches
-- **tcolorbox** environments:
-  - `merkbox` (blue) - definitions, formulas, key rules, common mistakes
-  - `analogie` (green) - everyday analogies and comparisons
-- **Step-by-step calculations** with `align*` and inline justifications
-- **Automatic PDF compilation** with cleanup
+- **Parallele Agents** für schnelle Generierung (solve-and-explain)
+- **TikZ/pgfplots** Graphen und Skizzen
+- **tcolorbox** Umgebungen:
+  - `merkbox` (blau) - Definitionen, Formeln, wichtige Regeln, typische Fehler
+  - `analogie` (grün) - Alltagsanalogien und Vergleiche
+- **Schritt-für-Schritt-Rechnungen** mit `align*` und Begründungen
+- **Automatische PDF-Kompilierung** mit Aufräumen
 
-## Requirements
+## Voraussetzungen
 
 - [Claude Code](https://claude.ai/claude-code) CLI
-- LaTeX distribution with `pdflatex`, `tikz`, `pgfplots`, `tcolorbox` (e.g. TeX Live, MacTeX)
+- LaTeX-Distribution mit `pdflatex`, `tikz`, `pgfplots`, `tcolorbox` (z.B. TeX Live, MacTeX)
