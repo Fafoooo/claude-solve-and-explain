@@ -13,6 +13,12 @@ Writes clean, student-style LaTeX solutions. Concise proofs, calculations, summa
 ### `/explain-simply`
 Writes beginner-friendly LaTeX explanations with `merkbox` (blue) and `analogie` (green) tcolorbox environments. Every concept explained from scratch, every step justified with "why", real-world analogies throughout.
 
+### `/feynman`
+The Feynman learning technique: explain a concept simply, identify gaps in understanding, fill them, then refine. Use when learning something new or testing your understanding of a topic.
+
+### `/feynman-check`
+Quality check that applies the Feynman technique to an existing explanation document. Finds gaps: undefined terms, skipped steps, missing "why"s, walls of math without words. Then fills those gaps. Use after generating an explanation to verify it's actually understandable.
+
 ## Output
 
 | Solution (latex-solution-writer) | Explanation (explain-simply) |
