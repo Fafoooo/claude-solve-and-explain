@@ -63,6 +63,3 @@ The skill works with any subject (math, logic, linear algebra, physics, etc.) an
 - [Claude Code](https://claude.ai/claude-code) CLI
 - LaTeX distribution with `pdflatex`, `tikz`, `pgfplots`, `tcolorbox` (e.g. TeX Live, MacTeX)
 
-## License
-
-MIT
