@@ -1,28 +1,20 @@
 # claude-solve-and-explain
 
-Eine Sammlung von Claude Code Slash-Commands zum Lösen von Übungsblättern und Erstellen von LaTeX-PDFs. Enthält 5 Skills, die zusammen oder einzeln verwendet werden können.
+Ein Claude Code Slash-Command zum Lösen von Übungsblättern. Erstellt zwei LaTeX-PDFs: eine saubere **Lösung** und eine anfängerfreundliche **Erklärung** mit Schritt-für-Schritt-Herleitungen, farbigen Infoboxen und TikZ-Graphen.
 
-## Skills
+## Was es tut
 
-### `/solve-and-explain` (Haupt-Skill)
-Der Orchestrator. Bekommt ein Übungsblatt, analysiert alle Aufgaben, rechnet die Lösungen durch und startet dann zwei Agents parallel – einen für die Lösung, einen für die Erklärung.
-
-### `/latex-solution-writer`
-Schreibt saubere LaTeX-Musterlösungen im Studenten-Stil. Beweise, Rechnungen, Zusammenfassungs-Boxen, TikZ-Graphen. In der ersten Person geschrieben ("Ich muss zeigen...") statt Lehrbuch-Sprache.
-
-### `/explain-simply`
-Schreibt anfängerfreundliche LaTeX-Erklärungen mit `merkbox` (blau) und `analogie` (grün) tcolorbox-Umgebungen. Jedes Konzept von Grund auf erklärt, jeder Schritt mit "warum" begründet, Alltagsanalogien durchgehend.
-
-### `/feynman`
-Die Feynman-Lerntechnik: Ein Konzept einfach erklären, Lücken im Verständnis finden, diese füllen und die Erklärung verfeinern. Verwenden wenn man etwas Neues lernt oder sein Verständnis testen will.
-
-### `/feynman-check`
-Qualitätsprüfung mit der Feynman-Technik für bestehende Erklärungen. Findet Lücken: undefinierte Begriffe, übersprungene Schritte, fehlende "Warum"s, Mathe-Wände ohne Worterklärungen. Füllt diese Lücken dann. Nach dem Erstellen einer Erklärung verwenden, um zu prüfen ob sie wirklich verständlich ist.
+1. Analysiert das Übungsblatt und rechnet alle Lösungen durch
+2. Startet zwei Agents parallel:
+   - **Lösung** – kompakt, im Studenten-Stil, mit TikZ-Skizzen
+   - **Erklärung** – jedes Konzept von Grund auf, mit `merkbox` (blau) und `analogie` (grün)
+3. Kompiliert beide PDFs und räumt auf
+4. Optional: Feynman-Check der Erklärung (Lücken finden und füllen)
 
 ## Ausgabe
 
-| Lösung (latex-solution-writer) | Erklärung (explain-simply) |
-|--------------------------------|----------------------------|
+| Lösung | Erklärung |
+|--------|-----------|
 | Kompakt, gut strukturiert | Jedes Konzept von Grund auf erklärt |
 | Geschrieben wie ein Student | Geschrieben wie ein Nachhilfelehrer |
 | `\fbox{}` Zusammenfassungs-Boxen | Blaue `merkbox` für Formeln/Regeln |
@@ -32,16 +24,12 @@ Qualitätsprüfung mit der Feynman-Technik für bestehende Erklärungen. Findet 
 ## Installation
 
 ```bash
-# Alle Skills global installieren
+# Global (in allen Projekten verfügbar)
 cp solve-and-explain.md ~/.claude/commands/
-cp latex-solution-writer.md ~/.claude/commands/
-cp explain-simply.md ~/.claude/commands/
-cp feynman.md ~/.claude/commands/
-cp feynman-check.md ~/.claude/commands/
 
 # Oder nur für ein Projekt
 mkdir -p .claude/commands
-cp *.md .claude/commands/
+cp solve-and-explain.md .claude/commands/
 ```
 
 ## Verwendung
@@ -50,30 +38,23 @@ cp *.md .claude/commands/
 # Komplette Pipeline: Lösung + Erklärung parallel
 /solve-and-explain löse Aufgaben 1-5 vom angehängten PDF
 
-# Nur eine saubere Lösung
-/latex-solution-writer schreibe Lösungen für Aufgaben 10a, 10d, 10e
+# Bestimmte Aufgaben
+/solve-and-explain löse nur Aufgabe 10a, 10d, 10e und 10g
 
-# Nur eine anfängerfreundliche Erklärung
-/explain-simply erkläre den Unterraum-Test mit Beispielen für Aufgabe 10
-
-# Konzept mit Feynman-Technik verstehen
-/feynman erkläre mir was ein Untervektorraum ist
-
-# Bestehende Erklärung auf Verständlichkeit prüfen
-/feynman-check prüfe erklaerung_blatt03.tex - versteht ein Anfänger das?
+# Mit Feynman-Check
+/solve-and-explain löse das Blatt und prüfe die Erklärung mit Feynman-Check
 ```
 
 Funktioniert mit jedem Fach (Mathe, Logik, Lineare Algebra, Physik, etc.) und passt sich der Sprache des Übungsblatts an.
 
-## Features
+## Was steckt drin
 
-- **Parallele Agents** für schnelle Generierung (solve-and-explain)
-- **TikZ/pgfplots** Graphen und Skizzen
-- **tcolorbox** Umgebungen:
-  - `merkbox` (blau) - Definitionen, Formeln, wichtige Regeln, typische Fehler
-  - `analogie` (grün) - Alltagsanalogien und Vergleiche
-- **Schritt-für-Schritt-Rechnungen** mit `align*` und Begründungen
-- **Automatische PDF-Kompilierung** mit Aufräumen
+Der Skill enthält alles in einer Datei:
+
+- **Lösungs-Stil**: Studenten-Ton, TikZ-Graphen, `\fbox`-Boxen, `booktabs`-Tabellen
+- **Erklärungs-Stil**: Grundlagen-Teil → Aufgaben → Zusammenfassung, `merkbox`/`analogie`, `align*` mit Begründungen
+- **Feynman-Check**: Erklärung auf Verständlichkeit prüfen, Lücken finden und füllen
+- **LaTeX-Templates**: Alle Pakete und tcolorbox-Definitionen
 
 ## Voraussetzungen
 
