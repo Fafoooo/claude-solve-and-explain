@@ -1,21 +1,22 @@
 # claude-solve-and-explain
 
-A Claude Code slash command that solves exercise sheets and generates two LaTeX PDFs: a clean **solution** and a beginner-friendly **explanation** with step-by-step walkthroughs, colored info boxes, and TikZ graphs.
+A set of Claude Code slash commands for solving exercise sheets and generating LaTeX PDFs. Includes three skills that work together or independently.
 
-## What it does
+## Skills
 
-Given an exercise sheet (PDF or text), the skill:
+### `/solve-and-explain` (main skill)
+The orchestrator. Given an exercise sheet, it analyzes all tasks, works out solutions, then launches two agents in parallel to generate both PDFs at once.
 
-1. Analyzes all tasks and works out the solutions
-2. Launches two agents in parallel:
-   - **Solution PDF** - clean, student-style write-up with proofs, calculations, and TikZ sketches
-   - **Explanation PDF** - detailed step-by-step guide with analogies, highlighted formulas, and "why" at every step
-3. Compiles both `.tex` files to PDF and cleans up build artifacts
+### `/latex-solution-writer`
+Writes clean, student-style LaTeX solutions. Concise proofs, calculations, summary boxes, TikZ graphs. Written in first person ("I need to show...") rather than textbook-speak.
 
-## Output example
+### `/explain-simply`
+Writes beginner-friendly LaTeX explanations with `merkbox` (blue) and `analogie` (green) tcolorbox environments. Every concept explained from scratch, every step justified with "why", real-world analogies throughout.
 
-| Solution | Explanation |
-|----------|-------------|
+## Output
+
+| Solution (latex-solution-writer) | Explanation (explain-simply) |
+|----------------------------------|------------------------------|
 | Concise, well-structured | Every concept explained from scratch |
 | Written like a student | Written like a tutor for beginners |
 | `\fbox{}` summary boxes | Blue `merkbox` for key formulas |
@@ -24,42 +25,43 @@ Given an exercise sheet (PDF or text), the skill:
 
 ## Installation
 
-Copy the skill file to your Claude Code commands directory:
-
 ```bash
-# Global (available in all projects)
+# All three skills (global)
 cp solve-and-explain.md ~/.claude/commands/
+cp latex-solution-writer.md ~/.claude/commands/
+cp explain-simply.md ~/.claude/commands/
 
-# Project-only
+# Or project-only
 mkdir -p .claude/commands
-cp solve-and-explain.md .claude/commands/
+cp *.md .claude/commands/
 ```
 
 ## Usage
 
-```
-/solve-and-explain solve exercises 1-5 from the attached PDF
+```bash
+# Full pipeline: solution + explanation in parallel
+/solve-and-explain solve exercises 1-5 from the PDF
+
+# Just a clean solution
+/latex-solution-writer write solutions for exercises 10a, 10d, 10e
+
+# Just a beginner-friendly explanation
+/explain-simply explain subspace test with examples for exercise 10
 ```
 
-```
-/solve-and-explain Aufgabe 10: Bestimme ob W ein Unterraum von V ist...
-```
-
-The skill works with any subject (math, logic, linear algebra, physics, etc.) and any language (defaults to German, adapts to the exercise sheet's language).
+Works with any subject (math, logic, linear algebra, physics, etc.) and adapts to the exercise sheet's language.
 
 ## Features
 
-- **Parallel agents** for fast generation
-- **TikZ/pgfplots** graphs and sketches where needed
-- **tcolorbox** environments for visual highlighting:
-  - `merkbox` (blue) - definitions, formulas, key rules
+- **Parallel agents** for fast generation (solve-and-explain)
+- **TikZ/pgfplots** graphs and sketches
+- **tcolorbox** environments:
+  - `merkbox` (blue) - definitions, formulas, key rules, common mistakes
   - `analogie` (green) - everyday analogies and comparisons
-- **Beginner-friendly explanations** - assumes no prior knowledge
-- **Student-tone solutions** - "I need to show...", not textbook-speak
+- **Step-by-step calculations** with `align*` and inline justifications
 - **Automatic PDF compilation** with cleanup
 
 ## Requirements
 
 - [Claude Code](https://claude.ai/claude-code) CLI
 - LaTeX distribution with `pdflatex`, `tikz`, `pgfplots`, `tcolorbox` (e.g. TeX Live, MacTeX)
-
