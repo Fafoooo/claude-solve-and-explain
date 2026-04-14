@@ -31,17 +31,35 @@ Lies die fertige Erklärung nochmal durch und prüfe mit der Feynman-Technik:
 
 ### Ton & Sprache
 - **Sprache**: Deutsch (oder Sprache des Übungsblatts)
-- **Ton**: Wie von einem Studenten geschrieben (nicht wie ein Lehrbuch)
-  - "Ich verwende...", "Ich muss zeigen...", "Setze ich ein..."
-  - NICHT: "Rezept", "Trick", "Man beachte..."
+- **KEINE KI-Phrasen / keine Meta-Narration**. Die Lösung muss klingen wie von einem Studenten selbst hingeschrieben, nicht wie von einer KI erklärt. VERBOTEN:
+  - "Zuerst erkläre ich, wie..." / "Bevor ich anfange, kläre ich..."
+  - "Ich stelle eine Tabelle auf und werte schrittweise aus..."
+  - "Ich beweise jetzt per Induktion, dass..."
+  - "Die Idee ist einfach: ..." / "Bevor ich hinschreibe, halte ich fest..."
+  - "Rezept", "Trick", "Man beachte..."
+- **ERLAUBT** ist "Ich setze...", "Setze F' := ..." im konkreten mathematischen Kontext (Standardsprache im Beweis). Aber keine Vorankündigungen, kein "Jetzt mache ich X".
+- Direkte, knappe Sätze. Rechnung hinknallen, Ergebnis kenntlich machen. Keine erfundenen Variablennamen (kein "F ≡ ..." wenn die Angabe kein F definiert).
 
 ### Struktur pro Aufgabe
-1. Aufgabenstellung kurz wiederholen oder referenzieren
-2. Rechnung/Beweis sauber durchführen
-3. Klares Ergebnis am Ende (fett oder in Box)
+1. **Angabe** kurz wiederholen (als eigener Block `\textbf{Angabe.}`) – das Aufgabenblatt sieht der Korrektor nicht immer daneben
+2. **In nummerierte Schritte** aufteilen: `\textbf{Schritt 1: ...}`, `\textbf{Schritt 2: ...}` etc.
+   - Schritt zeigt WAS gemacht wird (z.B. "Wahrheitstabelle aufstellen"), dann folgt die Durchführung
+   - Jeder Schritt soll für sich lesbar sein – man soll auf einen Blick sehen, "was tu ich wann?"
+3. **Ergebnis am Ende** klar abgesetzt (fett oder in `\fbox{\parbox{...}}`)
+
+### Herleitungen zeigen – der rote Faden
+Auch wenn die Lösung knapp sein soll: der Weg zum Ergebnis muss nachvollziehbar sein. Nicht nur das finale Ergebnis hinknallen.
+- **Zeilenweise Herleitung** statt nur Schlussergebnis: Bei Tabellen-Transformationen (Wahrheitstabelle → Normalform, Matrix → Gleichungssystem, etc.) für die ersten 2-3 Zeilen/Schritte explizit vorrechnen, dann "analog für die restlichen" + Gesamtergebnis. Format als Aufzählung (`itemize`) oder schmale Tabelle.
+- **Zwischenspalten** in Tabellen zeigen (z.B. bei Wahrheitstabellen: nicht nur Ergebnisspalte, sondern auch Hilfsspalten für Teilausdrücke). Auch wenn eine Spalte "technisch nicht nötig" ist – sie hilft beim Ablesen.
+- **Operator-Präzedenz / Auswertungsreihenfolge** explizit benennen, wenn sie für den Lösungsweg relevant ist ("von innen nach außen", "Punkt vor Strich" etc.).
+- **Beweise** zusätzlich mit **konkretem Beispiel** illustrieren, das die abstrakten Schritte an einer einfachen Instanz vorführt.
 
 ### Formatierung
 - Übersichtliche Tabellen mit `booktabs` (\toprule, \midrule, \bottomrule)
+- **Tabellen müssen in die Seitenbreite passen.** Keine breiten Spalten mit langen Herleitungstexten – lieber Aufzählung (`itemize`) mit Zeile + Herleitung untereinander.
+- **Abkürzungen im Titel ausschreiben**: `CNF (konjunktive Normalform)`, `BNF (Backus-Naur-Form)`, `ODE (gewöhnliche Differentialgleichung)` etc. – so sieht der Student im fertigen PDF direkt, wofür die Abkürzung steht.
+- **Markierungs-/Verwendungsspalten** in großen Tabellen erhalten (z.B. in einer Wahrheitstabelle: eine Spalte "→ CNF" / "→ DNF" pro Zeile, je nachdem welche Zeile für welche Form verwendet wird). Hilft beim Ablesen.
+- Fach-Jargon, der im Lehrbuch zwar Standard, aber leicht verwechselbar ist (z.B. "Minterm"/"Maxterm"), nur verwenden wenn der User ihn ausdrücklich will. Im Zweifel durch klare Beschreibung ersetzen ("Konjunktion der wahren Zeile", "Disjunktion der falschen Zeile").
 - Zusammenfassungen in `\fbox{\parbox{...}{...}}` Boxen
 - Bei Beweisen: Alle Schritte zeigen, nichts überspringen, $\square$ am Ende
 - Bei Gegenbeispielen: Konkret zeigen WARUM es scheitert
@@ -71,10 +89,13 @@ Lies die fertige Erklärung nochmal durch und prüfe mit der Feynman-Technik:
 ```
 
 ### Qualitätskriterien Lösung
-- Mathematisch korrekt (alle Rechnungen doppelt prüfen)
+- Fachlich korrekt (alle Rechnungen/Beweise doppelt prüfen)
 - Jeder Beweis vollständig (keine "offensichtlich" oder "trivialerweise")
 - Ergebnis klar erkennbar und vom Rechenweg abgesetzt
 - Kompiliert fehlerfrei mit pdflatex
+- Kein erfundener Variablenname, der nicht in der Angabe steht
+- Tabellen ragen nicht über den Seitenrand hinaus
+- Keine Meta-Narration / KI-Phrasen (siehe Ton-Regeln)
 
 ---
 
