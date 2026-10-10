@@ -1,0 +1,60 @@
+% Eine Quelle, zwei PDFs. scripts/build.sh setzt \explainmode:
+%   0 → loesung_blattNN.pdf     (Abgabe: Angabe + Schritte, schlicht)
+%   1 → erklaerung_blattNN.pdf  (identisch + \explain{} / \explainfig{})
+\documentclass[a4paper,11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}          % englisches Blatt: [english]
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{pgfplots}\pgfplotsset{compat=1.18}
+\usepackage[most]{tcolorbox}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+
+% ---- Modus ----
+\providecommand{\explainmode}{0}
+\newif\ifexplain
+\ifnum\explainmode=1 \explaintrue\fi
+
+% ---- Gerüst (in beiden PDFs) ----
+\newcommand{\blatttitel}[2]{\begin{center}{\Large\bfseries #1}\\[2pt]#2\end{center}}
+\newcommand{\aufgabe}[1]{\section*{Aufgabe #1}}          % englisch: \renewcommand → Exercise
+\newcommand{\angabe}[1]{\textit{#1}\par\smallskip}
+\newcommand{\teil}[1]{\subsection*{(#1)}}
+\newcommand{\why}[1]{\text{\small\color{black!65}#1}}   % Begründung rechts: && \why{...}
+
+% ---- Nur im Erklär-PDF ----
+\newtcolorbox{erklbox}{colback=blue!4,colframe=blue!40,breakable,boxrule=0.5pt,
+  fonttitle=\bfseries\small,title={Erklärung}}
+\newcommand{\explain}[1]{\ifexplain\begin{erklbox}#1\end{erklbox}\fi}
+\newcommand{\explainfig}[1]{\ifexplain\begin{center}#1\end{center}\fi}
+
+\begin{document}
+\blatttitel{Übungsblatt NN -- \ifexplain Erklärung\else Lösung\fi}{Kursname}
+
+\explain{Kurzer Überblick: Welche Themen kommen vor, welche Begriffe muss man kennen?}
+
+\aufgabe{1}
+\angabe{Lösen Sie das Gleichungssystem $\beta = -2$, $0 = \alpha + 2\beta$.}
+\explain{Wir setzen den bekannten Wert für $\beta$ in die zweite Gleichung ein. Dann bleibt nur noch eine Unbekannte übrig.}
+\begin{align*}
+0 &= \alpha + 2\beta    && \why{zweite Gleichung}\\
+0 &= \alpha + 2\cdot(-2) && \why{einsetzen: $\beta = -2$}\\
+0 &= \alpha - 4          && \why{$2\cdot(-2) = -4$}\\
+4 &= \alpha              && \why{$|\,+4$}
+\end{align*}
+\explain{Das „$|\,+4$“ heißt: Auf beiden Seiten wird $4$ addiert. Links steht dann $4$, rechts bleibt $\alpha$ allein.}
+Probe:
+\begin{align*}
+\alpha + 2\beta &= 4 + 2\cdot(-2) && \why{einsetzen}\\
+&= 4 - 4 && \why{$2\cdot(-2)=-4$}\\
+&= 0 \;\checkmark && \why{$4 - 4 = 0$}
+\end{align*}
+\[\boxed{\alpha = 4,\ \beta = -2}\]
+
+\end{document}

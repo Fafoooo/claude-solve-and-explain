@@ -1,62 +1,51 @@
 # claude-solve-and-explain
 
-Ein Claude Code Slash-Command zum Lösen von Übungsblättern. Erstellt zwei LaTeX-PDFs: eine saubere **Lösung** und eine anfängerfreundliche **Erklärung** mit Schritt-für-Schritt-Herleitungen, farbigen Infoboxen und TikZ-Graphen.
+Skill zum Lösen von Mathe- und Theorie-Übungsblättern für **Claude Code** und **Hermes Agent**.
+Aus **einer** LaTeX-Quelle entstehen zwei PDFs:
 
-## Was es tut
+| `loesung_blattNN.pdf` – wird abgegeben | `erklaerung_blattNN.pdf` – zum Verstehen |
+|---|---|
+| Angabe + Lösung, **jeder Rechenschritt einzeln** mit Begründung rechts | exakt dasselbe Dokument |
+| schlicht, keine Erklärtexte | plus Erklärkasten direkt hinter jedem Schritt |
+| Grafik nur, wenn die Aufgabe eine verlangt | plus erklärende Grafiken |
 
-1. Analysiert das Übungsblatt und rechnet alle Lösungen durch
-2. Startet zwei Agents parallel:
-   - **Lösung** – kompakt, im Studenten-Stil, mit TikZ-Skizzen
-   - **Erklärung** – jedes Konzept von Grund auf, mit `merkbox` (blau) und `analogie` (grün)
-3. Kompiliert beide PDFs und räumt auf
-4. Optional: Feynman-Check der Erklärung (Lücken finden und füllen)
+Beide PDFs haben dieselben Nummern, Zeilen und dieselbe Optik, weil sie aus derselben Datei gebaut werden.
 
-## Ausgabe
+## Was neu ist (v2)
 
-| Lösung | Erklärung |
-|--------|-----------|
-| Kompakt, gut strukturiert | Jedes Konzept von Grund auf erklärt |
-| Geschrieben wie ein Student | Geschrieben wie ein Nachhilfelehrer |
-| `\fbox{}` Zusammenfassungs-Boxen | Blaue `merkbox` für Formeln/Regeln |
-| TikZ-Graphen wo nötig | Grüne `analogie`-Boxen für Alltagsvergleiche |
-| Typisch 3-9 Seiten | Typisch 13-25 Seiten |
+- **Schrittregel:** eine Umformung pro Zeile, Einsetzen als eigener Schritt, keine „offensichtlich“/„analog“.
+- **Automatische Schritt-Prüfung** (`scripts/check_steps.py`): meldet Zeilen ohne Begründung,
+  mehrere Umformungen in einer Zeile, verbotene Floskeln und unverlangte Grafiken in der Lösung.
+- **Nachrechnen mit Python** (SymPy/SciPy) und eine **unabhängige zweite Prüfung** vor dem Bauen.
+- Lösung in der Sprache der Angabe, Erklärungen immer auf Deutsch.
+
+## Dateien
+
+```
+SKILL.md                 Anleitung für den Agenten
+templates/blatt.tex      Vorlage (Schalter \explainmode, Makros \angabe, \why, \explain, \explainfig)
+scripts/build.sh         blattNN.tex → loesung_blattNN.pdf + erklaerung_blattNN.pdf
+scripts/check_steps.py   Schritt-Prüfung (python3 check_steps.py --selftest)
+```
 
 ## Installation
 
 ```bash
-# Global (in allen Projekten verfügbar)
-cp solve-and-explain.md ~/.claude/commands/
+# Claude Code (global)
+git clone https://github.com/Fafoooo/claude-solve-and-explain ~/.claude/skills/solve-and-explain
 
-# Oder nur für ein Projekt
-mkdir -p .claude/commands
-cp solve-and-explain.md .claude/commands/
+# Hermes Agent
+git clone https://github.com/Fafoooo/claude-solve-and-explain ~/.hermes/skills/education/solve-and-explain
 ```
+
+Voraussetzungen: `pdflatex` (TeX Live mit `latex-extra`, `pictures`, `science`, `lang-german`),
+`pdftoppm`/`pdftotext` (poppler), Python 3 mit `sympy`/`scipy` zum Nachrechnen.
 
 ## Verwendung
 
-```bash
-# Komplette Pipeline: Lösung + Erklärung parallel
-/solve-and-explain löse Aufgaben 1-5 vom angehängten PDF
-
-# Bestimmte Aufgaben
-/solve-and-explain löse nur Aufgabe 10a, 10d, 10e und 10g
-
-# Mit Feynman-Check
-/solve-and-explain löse das Blatt und prüfe die Erklärung mit Feynman-Check
+```
+/solve-and-explain löse das angehängte Blatt
 ```
 
-Funktioniert mit jedem Fach (Mathe, Logik, Lineare Algebra, Physik, etc.) und passt sich der Sprache des Übungsblatts an.
-
-## Was steckt drin
-
-Der Skill enthält alles in einer Datei:
-
-- **Lösungs-Stil**: Studenten-Ton, TikZ-Graphen, `\fbox`-Boxen, `booktabs`-Tabellen
-- **Erklärungs-Stil**: Grundlagen-Teil → Aufgaben → Zusammenfassung, `merkbox`/`analogie`, `align*` mit Begründungen
-- **Feynman-Check**: Erklärung auf Verständlichkeit prüfen, Lücken finden und füllen
-- **LaTeX-Templates**: Alle Pakete und tcolorbox-Definitionen
-
-## Voraussetzungen
-
-- [Claude Code](https://claude.ai/claude-code) CLI
-- LaTeX-Distribution mit `pdflatex`, `tikz`, `pgfplots`, `tcolorbox` (z.B. TeX Live, MacTeX)
+Der Moodle-Solver von Hermes nutzt den Skill automatisch für neue Blätter in Mathe-Kursen
+und legt die Ergebnisse unter `uebNN/` im Kurs-Repo ab.
